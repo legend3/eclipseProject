@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd"
+>
+<!--   1.加载db.properties数据库信息文件 -->
+    <bean id="config" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+        <property name="locations">
+            <array>
+                <value>classpath:db.properties</value>
+            </array>
+        </property>
+        <property name="fileEncoding">
+            <value>UTF-8</value>
+        </property>
+    </bean>
+
+    <bean id="studentMapper" class="org.legend.springMybatis.dao.impl.studentDaoImpl">
+<!--        将spring配置的sqlSessionFactory对象交给mapper(dao)-->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+    </bean>
+    <bean id="studentService" class="org.legend.springMybatis.service.impl.studentServiceImpl">
+        <property name="studentMapper" ref="studentMapper"/>
+    </bean>
+
+<!--   2.配置数据库信息(替代mybatis的配置文件conf.xml;(不由mybatis的配置文件conf.xml关联数据库了，而是交给spring配置文件关联))
+        PropertyPlaceholderConfigurer起的作用就是将占位符指向的数据库配置信息放在dataSource的bean中.
+ -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="url" value="${url}"></property>
+        <property name="driverClassName" value="${driver}"></property>
+        <property name="username" value="${username}"></property>
+        <property name="password" value="${password}"></property>
+    </bean>
+<!--    3.在SpringIoc容器中创建MyBatis的核心类SqlSessionFatory    -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+<!--        加载mybatis配置文件-->
+        <property name="configLocation" value="classpath:conf.xml"></property>
+    </bean>
+
+
+
+
+
+
+
+
+
+
+
+
+</beans>

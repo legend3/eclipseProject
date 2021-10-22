@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2021-10-23T04:32:32 CST" name="Default suite" finished-at="2021-10-23T04:32:33 CST" duration-ms="831">
+    <groups>
+    </groups>
+    <test started-at="2021-10-23T04:32:32 CST" name="Default test" finished-at="2021-10-23T04:32:33 CST" duration-ms="831">
+      <class name="org.legend.springMybatis.test.TestCase">
+        <test-method signature="case01()[pri:0, instance:org.legend.springMybatis.test.TestCase@7adda9cc]" started-at="2021-10-23T04:32:32 CST" name="case01" finished-at="2021-10-23T04:32:33 CST" duration-ms="786" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- case01 -->
+      </class> <!-- org.legend.springMybatis.test.TestCase -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
