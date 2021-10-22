@@ -15,7 +15,7 @@ public class TestCase {
         Student student = new Student();
         student.setStuAge(36);
         student.setStuName("仓颉");
-        student.setStuNo(7);
+        student.setStuNo(6);
         studentService.addStudent(student);
 
     }
