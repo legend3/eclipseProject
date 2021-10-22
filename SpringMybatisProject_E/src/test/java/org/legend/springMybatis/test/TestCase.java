@@ -14,7 +14,7 @@ public class TestCase {
         IStudentService studentService = (IStudentService)context.getBean("studentService") ;
         Student student = new Student();
         student.setStuAge(36);
-        student.setStuName("仓颉");
+        student.setStuName("仓颉"-女);
         student.setStuNo(6);
         studentService.addStudent(student);
 
