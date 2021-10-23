@@ -16,14 +16,6 @@
         </property>
     </bean>
 
-    <bean id="studentMapper" class="org.legend.springMybatis.dao.impl.studentDaoImpl">
-<!--        将spring配置的sqlSessionFactory对象交给mapper(dao)-->
-        <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
-    </bean>
-    <bean id="studentService" class="org.legend.springMybatis.service.impl.studentServiceImpl">
-        <property name="studentMapper" ref="studentMapper"/>
-    </bean>
-
 <!--   2.配置数据库信息(替代mybatis的配置文件conf.xml;(不由mybatis的配置文件conf.xml关联数据库了，而是交给spring配置文件关联))
         PropertyPlaceholderConfigurer起的作用就是将占位符指向的数据库配置信息放在dataSource的bean中.
  -->
@@ -33,22 +25,35 @@
         <property name="username" value="${username}"></property>
         <property name="password" value="${password}"></property>
     </bean>
-<!--    3.在SpringIoc容器中创建MyBatis的核心类SqlSessionFatory    -->
+    
+    <!-- 
+    	1和2取代: Reader reader = Resources.getResourceAsReader("mybatisConf.xml");
+    -->
+
+    
+<!--    3.在SpringIoc容器中创建MyBatis的核心类SqlSessionFatory
+		SqlSessionFactory是MyBatis的关键对象,它是个单个数据库映射关系经过编译后的内存镜像.
+			SqlSessionFactory对象的实例可以通过SqlSessionFactoryBuilder对象类获得,
+				而SqlSessionFactoryBuilder则可以从XML配置文件或一个预先定制的Configuration的实例构建出SqlSessionFactory的实例！！！
+				
+				每一个MyBatis的应用程序都以一个SqlSessionFactory对象的实例为核心.
+					同时SqlSessionFactory也是线程安全的,SqlSessionFactory一旦被创建,应该在应用执行期间都存在.
+						在应用运行期间不要重复创建多次,建议使用单例模式.SqlSessionFactory是创建SqlSession的工厂.
+    -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"></property>
 <!--        加载mybatis配置文件-->
         <property name="configLocation" value="classpath:conf.xml"></property>
     </bean>
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    <bean id="studentMapper" class="org.legend.springMybatis.dao.impl.studentDaoImpl">
+<!--        将spring配置的sqlSessionFactory对象交给mapper(原先定义的dao层)		-->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+    </bean>
+    <bean id="studentService" class="org.legend.springMybatis.service.impl.studentServiceImpl">
+        <property name="studentMapper" ref="studentMapper"/>
+    </bean>
+    
+    
+    
 </beans>
