@@ -47,7 +47,7 @@
     </bean>
     
     <bean id="studentMapper" class="org.legend.springMybatis.dao.impl.studentDaoImpl">
-<!--        将spring配置的sqlSessionFactory对象交给mapper(原先定义的dao层)		-->
+<!--        将spring配置的sqlSessionFactory对象交给mapper(原先定义的dao层)-->
         <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
     </bean>
     <bean id="studentService" class="org.legend.springMybatis.service.impl.studentServiceImpl">
