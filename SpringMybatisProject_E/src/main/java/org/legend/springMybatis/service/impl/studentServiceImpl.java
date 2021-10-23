@@ -13,7 +13,7 @@ public class studentServiceImpl implements IStudentService {
     }
 
     @Override
-    public void addStudent(Student student) {
+    public void add(Student student) {
         //调用Dao层
         studentMapper.addStudent(student);
     }

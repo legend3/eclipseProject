@@ -32,6 +32,7 @@
 
     
 <!--    3.在SpringIoc容器中创建MyBatis的核心类SqlSessionFatory
+
 		SqlSessionFactory是MyBatis的关键对象,它是个单个数据库映射关系经过编译后的内存镜像.
 			SqlSessionFactory对象的实例可以通过SqlSessionFactoryBuilder对象类获得,
 				而SqlSessionFactoryBuilder则可以从XML配置文件或一个预先定制的Configuration的实例构建出SqlSessionFactory的实例！！！
@@ -47,7 +48,11 @@
     </bean>
     
     <bean id="studentMapper" class="org.legend.springMybatis.dao.impl.studentDaoImpl">
-<!--        将spring配置的sqlSessionFactory对象交给mapper(原先定义的dao层)-->
+<!--	
+		前提：通过sqlSessionFactoryc创建SqlSession,从而能获取映射Mapper类接口方法操作数据库:
+				0.我们把dao层充当Mapper类
+				1.此处我们用bean生成sqlSessionFactory
+		将spring配置的sqlSessionFactory对象交给mapper(原先定义的dao层)	-->
         <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
     </bean>
     <bean id="studentService" class="org.legend.springMybatis.service.impl.studentServiceImpl">

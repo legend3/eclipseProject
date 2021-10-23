@@ -37,7 +37,7 @@ public class QueryStudentByIdServlet extends HttpServlet {
 //        super.doGet(req, resp);
         req.setCharacterEncoding("utf-8");
 //        IStudentService stuService = new IStudentServiceImpl();
-        String name = studentService.queryStudentById();
+        String name = studentService.Query();
         System.out.println("名字：" + name);
         req.setAttribute("name", name);
         req.getRequestDispatcher("result.jsp").forward(req, resp);

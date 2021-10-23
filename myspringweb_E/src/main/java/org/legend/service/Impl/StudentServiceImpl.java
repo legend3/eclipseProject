@@ -12,7 +12,7 @@ public class StudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public String queryStudentById() {
+    public String Query() {//事务
         return studentDao.queryStudentbyId();
     }
 }
