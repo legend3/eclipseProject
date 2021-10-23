@@ -10,7 +10,9 @@ import org.testng.annotations.Test;
 public class TestCase {
 	@Test
     public void case01() {
+		//加载spring容器文件
         ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        //service层操作数据库事务
         IStudentService studentService = (IStudentService)context.getBean("studentService") ;
         Student student = new Student();
         student.setStuAge(36);

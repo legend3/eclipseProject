@@ -1,1 +1,1 @@
-select * from mybatisproject.student 
+select * from mybatisproject.student;
