@@ -105,11 +105,11 @@
             <version>8.0.26</version>
         </dependency>
         <dependency>
-                <groupId>org.testng</groupId>
-                <artifactId>testng</artifactId>
-                <version>7.4.0</version>
-                <!--  作用域：只能在test目录    -->
-                <!--      <scope>test</scope>-->
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.4.0</version>
+            <!--  作用域：只能在test目录    -->
+            <!--      <scope>test</scope>-->
             </dependency>
     </dependencies>
 </project>

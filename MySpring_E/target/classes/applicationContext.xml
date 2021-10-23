@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+	   http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       https://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/cache
+       http://www.springframework.org/schema/cache/spring-cache.xsd"
+    default-autowire="constructor"
+>
+<!--  课程一：整个配置文件：spring ioc容器  -->
+<!--    因此，该文件中产生的所有对象，被spring放入了一个称之为spring ioc容器的地方-->
+<!--    id：唯一标识符 class: 指定类型-->
+<!--    name: 类的属性名 value: 类属性的值-->
+
+<!--    课程二："利用spring容器替代工厂模式创建对象"
+          SpringIOC的发展史：
+           2.1 方式一：new set赋值方式
+           2.2 方式二：简单工厂
+           2.3 方式三：ioc
+        Ioc(控制反转)也可以称之为DI（依赖注入）：
+        控制反转： 将创建对象、属性值的方式进行了反转，从new、setXxx() 反转为了从springIOC容器getBean()
+        依赖注入：将属性值注入给了属性，将属性注入给了bean，注bean注入给了ioc容器；
+总结：ioc/id，无论要什么对象，都可以直接区springioc容器中获取，而不需要自己操作(new/setXxx())
+因此之后的ioc分为：
+                    1.先给springioc中存放对象并赋值-Bean
+                    2.拿
+-->
+<!--    一旦Student被实例化，Spring就会调用元素所指定属性的setter方法为该属性注入值。
+            在这里，value="10"，会尝试把字符串”10”解析成int类型。-->
+    <!--  learnCourseWithIoc()测试方法   -->
+    <bean id="student" class="org.legend.entity.Student">
+        <property name="stuNo" value="10"></property>
+        <property name="stuName" value="legend"></property>
+        <property name="stuAge" value="34"></property>
+    </bean>
+<!--    注意：区分大小写-->
+    <bean id="javaCourse" class="org.legend.newInstance.JavaCourse"></bean>
+    <bean id="htmlCourse" class="org.legend.newInstance.HtmlCourse"></bean>
+
+<!-- 课程三： 三种注入注入依赖，各种属性的注入 -->
+    <!--  testDI()测试方法  -->
+<!--    <bean id="teacher" class="org.legend.entity.Teacher">-->
+<!--        <property name="name" value="legend"></property>-->
+<!--        <property name="age" value="34"></property>-->
+<!--    </bean>-->
+
+<!--    <bean id="course" class="org.legend.entity.Course">-->
+    <!-- 1.set方式注入：
+            1.1 一定要有无参构造器（首先反射调无参构造方法）其实就是通过容器调用了 xxx.setXxx(),完成属性的赋值。
+
+            IOC容器赋值：
+                            1.如果是简单类型(8个基本+String)，value="值"；
+                            2.如果是对象类型，ref="需要引用的id值"，
+                            因此实现了对象与对象之间的依赖关系
+    -->
+<!--        <property name="courseName" value="java"></property>-->
+<!--        <property name="courseHour" value="200"></property>-->
+<!--        <property name="teacher" ref="teacher"></property>-->
+
+    <!-- 2.构造方法注入：（有构造器就不能setter方式！）
+           2.1 只要被依赖的bean有带参构造方法
+           2.2 constructor-arg顺序与构造方法参数顺序要求一致
+                2.2.1 也可以指定参数顺序:
+                    index:  索引
+                    name: 指定参数名
+                    type：指定类型(指定赋值的类型)
+            本例应用name指定参数名：
+        -->
+<!--        <constructor-arg value="java" name="courseName" type="java.lang.String"></constructor-arg>-->
+<!--        <constructor-arg ref="teacher" name="teacher" index="2"></constructor-arg>-->
+<!--        <constructor-arg value="200" name="courseHour" type="int"></constructor-arg>-->
+<!--    </bean>-->
+
+<!--  3.名命空间<Namespaces>注入：
+          3.1 头部Beans内加：xmlns:p="http://www.springframework.org/schema/p"；不用getBean("xxx")对象也会被生成！
+          3.2
+                简单类型：p:属性名="属性值"
+                引用类型(除String外)：p:属性名-ref="引用的id"
+                注意多个p赋值的时候，要有空格。
+          3.3 参数顺序任意
+          -->
+<!--    <bean id="course" class="org.legend.entity.Course" p:courseHour="300" p:courseName="hadoop" p:teacher-ref="teacher"></bean>-->
+
+    <!--   补充：区别参数值类型,Teacher两个属性分别独立两个构造方法     -->
+<!--    <bean id="teacher" class="org.legend.entity.Teacher">-->
+<!--        <constructor-arg name="age" value="34"></constructor-arg>   -->
+<!--    </bean>-->
+    <!--  5.集合类型注入：          -->
+    <bean id="collectionDemo" class="org.legend.entity.AllCollectionType">
+        <!--  通过set方式赋值-->
+        <property name="listElement">
+            <!--    list集合元素赋值   -->
+            <list>
+                <value>足球</value>
+                <value>篮球</value>
+                <value>排球</value>
+            </list>
+        </property>
+        <property name="arrayElement">
+            <!--   数组元素的赋值         -->
+            <array>
+                <value>汽车</value>
+                <value>火车</value>
+                <value>自行车</value>
+            </array>
+<!--            <list>-->
+<!--                <value>汽车</value>-->
+<!--                <value>火车</value>-->
+<!--                <value>自行车</value>-->
+<!--            </list>-->
+        </property>
+        <property name="setElement">
+            <!--     set集合元素赋值         -->
+            <set>
+                <value>Linux</value>
+                <value>Windows</value>
+                <value>Mac</value>
+            </set>
+<!--            <list>-->
+<!--                <value>Linux</value>-->
+<!--                <value>Windows</value>-->
+<!--                <value>Mac</value>-->
+<!--            </list>-->
+        </property>
+        <property name="mapElement">
+            <!--     map键值对元素赋值       -->
+            <map>
+                <entry>
+                    <key>
+                        <value>tea</value>
+                    </key>
+                    <value>茶</value>
+                </entry>
+                <entry>
+                    <key>
+                        <value>water</value>
+                    </key>
+                    <value>水</value>
+                </entry>
+            </map>
+        </property>
+            <!--  Properties的元素赋值-setter方式      -->
+<!--        <property name="propsElement">-->
+<!--            <props>-->
+<!--                <prop key="跑步">室外</prop>-->
+<!--                <prop key="跳操">室内</prop>-->
+<!--                <prop key="举重">室内</prop>-->
+<!--            </props>-->
+<!--        </property>-->
+        <!--  Properties的元素赋值-构造器方式      -->
+        <constructor-arg  name="propsElement">
+            <props>
+                <prop key="跑步">室外</prop>
+                <prop key="跳操">室内</prop>
+                <prop key="举重">室内</prop>
+            </props>
+        </constructor-arg>
+    </bean>
+
+<!-- 课程四:
+    1.参数值位置：
+        a.写在首尾标签<value></value>的(子元素)中间，不加双引号
+        b.(直接在proerty/constructor-arg中)写在value的属性值中(必须加双引号)
+    2.type属性：
+        a.可以通过type属性指定数据类型；
+        b.直接在proerty中没有、constructor-arg中有
+    3.参数值包含特殊字符(<,&)时的处理方法，两种：
+         a.使用<![CDDATA[]]>标记   -只适用子元素-<![CDDATA[%#$%$%^$#$%]]
+         b.使用XML预定义的实体引用    -两种情况(value属性/子元素)都适用
+    4.处理空值：""、null
+    *5.在ioc中定义bean的前提：该bean的类必须提供了无参构造
+    6.自动装配(注入）：
+                约定优于配置
+        *6.1 只适用于引用类型ref类型
+        6.2 autowire="byName|byType|constructor|no":Course类中有一个ref属性teacher(属性名)，
+        并且该ioc容器中恰好有一个bean的id也叫teacher；
+        6.3
+            6.3.1 byName：自动寻找：其他bean的id值=该Course类的属性名
+            6.3.2 byType：其他bean的类型class是否与该Course类的ref属性一致；（注意，此种方式必须满足：当前Ioc容器中只能有一个Bean满足条件）
+            6.3.3 constructor：本质与byType一样，其他bean的类型(class)是否与该Course类的构造方法参数的类型一致。
+        6.4 可以在头文件中一次性将该ioc容器所有bean，统一设置成自动装配
+            6.4.1 default-autowire="constructor"
+            6.4.2 各bean自己的autowire="xxx"，会覆盖头文件中统一配置的
+            6.4.3 自动装配可读性不好
+       6.5 使用注解定义bean：通过注解的形式 将bean以及相应的属性值 放入ioc容器
+           过程：Spring在启动的时候，会根据base-package在该包中扫描所有类，查找这些类的是否有注解@xxx("sss")，
+                如果有，则将该类加入spring Ioc容器。
+            6.5.1 配置扫描器：
+                头文件配置：xmlns:context="http://www.springframework.org/schema/context
+                <context:component-scan base-package="org.legend.dao"/>
+                </context:component-scan>Spring在启动的时候，会根据base-package在 该包中扫描所有类，查找这些类是否有注解@Component("studentDao"),如果有，则将该类 加入spring Ioc容器。
+
+   -->
+    <!--    testDI()测试方法       -->
+<!--    <bean id="teacher" class="org.legend.entity.Teacher">-->
+        <!-- 1. -->
+<!--        <constructor-arg name="name">-->
+<!--            <value>zxs</value>-->
+<!--        </constructor-arg>-->
+        <!--  2.-->
+<!--        <property name="name">-->
+<!--            <value type="java.lang.String">z&lt;xs</value>-->
+<!--        </property>-->
+        <!-- 3.b -->
+            <!--  value属性中应用      -->
+<!--        <property name="name" value="z&lt;xs"></property>-->
+            <!-- 子元素应用  -->
+<!--        <property name="name">-->
+<!--            <value>z&lt;xs</value>-->
+<!--        </property>-->
+        <!-- 3.b -->
+<!--        <property name="name">-->
+<!--            <value type="java.lang.String">z<![CDATA[>]]>xs</value>-->
+<!--        </property>-->
+<!--        <constructor-arg name="name">-->
+<!--            <value type="java.lang.String">x<![CDATA[>]]>xs</value>-->
+<!--        </constructor-arg>-->
+        <!-- 4.  -->
+        <!--  "null"      -->
+<!--        <property name="name">-->
+<!--            <value type="java.lang.String">null</value>-->
+<!--        </property>-->
+        <!--    null    -->
+<!--        <property name="name">-->
+<!--            <null></null>-->
+<!--        </property>-->
+        <!--  这个null是什么？-->
+<!--        <property name="name" value="null" />-->
+        <!--    ""    -->
+<!--        <property name="name">-->
+<!--            <value></value>-->
+<!--        </property>-->
+<!--        <property name="name" value=""></property>-->
+
+        <!--  6.4 (头文件中一次性)自动装配  -->
+<!--        <property name="name">-->
+<!--            <value type="java.lang.String">对应default-autowire为byName自动注入的老师</value>-->
+<!--        </property>-->
+<!--        <property name="name">-->
+<!--            <value type="java.lang.String">对应default-autowire改为byType自动注入的老师</value>-->
+<!--        </property>-->
+<!--        <property name="name">-->
+<!--            <value type="java.lang.String">对应default-autowire改为constructor自动注入的老师</value>-->
+<!--        </property>-->
+<!--    </bean>-->
+        <!--  6.3 -->
+<!--    <bean id="course" class="org.legend.entity.Course" autowire="byName">-->
+<!--        <property name="courseName" value="java"></property>-->
+<!--        <property name="courseHour" value="200"></property>-->
+<!--    </bean>-->
+<!--    <bean id="course" class="org.legend.entity.Course" autowire="byType">-->
+<!--        <property name="courseName" value="java"></property>-->
+<!--        <property name="courseHour" value="200"></property>-->
+<!--    </bean>-->
+<!--    <bean id="teacher2" class="org.legend.entity.Teacher">-->
+<!--        <property name="name" value="byType自动注入的老师"></property>-->
+<!--    </bean>-->
+<!--    <bean id="course" class="org.legend.entity.Course" autowire="constructor">-->
+<!--        <property name="courseName" value="java"></property>-->
+<!--        <property name="courseHour" value="200"></property>-->
+<!--    </bean>-->
+        <!--  6.4 (头文件中一次性)自动装配  -->
+<!--        <bean id="course" class="org.legend.entity.Course">-->
+<!--            <property name="courseName" value="java"></property>-->
+<!--            <property name="courseHour" value="200"></property>-->
+<!--        </bean>-->
+        <!-- 6.5 配置扫描器 -->
+        <context:component-scan base-package="org.legend.dao.Impl, org.legend.service.Impl"/>
+
+<!-- 课程5：事务:
+使用注解实现事务(声明式事务,还有编程式事务！)
+目标：通过事务使以下方法，要么全成功、要么全失败
+    public void addStudent()
+    {
+        //增加班级
+        //增加学生
+        //crdu
+    }
+        1.jar包：
+                spring.jar-tx-x.x.x  -srping事务包
+                ojdbc.jar-事务必然与数据库相关(增删改查，事务失败同步数据库提交、回滚同步！).数据库驱动包
+                commons-dbcp.jar-数据库连接池使用的数据源
+                commons-pool.jar-连接池
+                spring-jdbc.jar-spring操作数据库包
+                aopalliance.jar-是AOP联盟的API包,里面包含了针对面向切面的接口。 通常Spring等其它具备动态织入功能的框架依赖此包
+        2.配置
+        jdbc\mybatistics\spring
+            2.1 增加事务tx的名命空间-xmlns:tx="http://www.springframework.org/schema/tx"
+-->
+    <!-- 2.1 -->
+    <!-- 1.增加对事务的支持，指定具体的事务  -->
+    <tx:annotation-driven transaction-manager="txManager"/>
+    <!--  2.配置(数据库事务)管理器txManager，且指定数据源-->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <!-- 3.配置数据库相关, 从连接池获取数据源 -->
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/netctoss?useSSL=false&amp;serverTimezone=Asia/Shanghai&amp;characterEncoding=utf-8&amp;autoReconnect=true"/>
+        <property name="username" value="root"></property>
+        <property name="password" value="root"></property>
+        <property name="maxTotal" value="10"></property>
+        <property name="maxIdle" value="6"/>
+        <property name="maxConnLifetimeMillis" value="60000"/>
+    </bean>
+    <!-- 配置数据库相关-事务 -->
+    <bean id="studentDao" class="org.legend.dao.Impl.StudentDaoImpl"></bean>
+    <bean id="studentService" class="org.legend.service.Impl.StudentServiceImpl">
+        <property name="studentDao" ref="studentDao"></property>
+    </bean>
+
+    <!-- 课程6：
+               AOP:
+
+    -->
+
+    <!-- 配置前置通知 -->
+
+    <!-- addStudent()所在方法 （扫描）-->
+
+    <!-- “前置通知”类 （扫描）-->
+    <!-- =========连接线的一方========= -->
+    <context:component-scan base-package="org.legend.aop,org.legend.service.Impl,org.legend.dao.Impl"/>
+
+    <!-- 一、实现接口方式   -->
+    <!-- 将addStudent()和通知 进行关联 -->
+<!--    <aop:config>-->
+        <!-- 配置切入点  （在哪里执行通知 ） -->
+        <!-- =========连接线的另一方========= -->
+        <!--
+             1、execution(): 表达式主体 (必须加上execution)。
+             2、第一个*号：表示返回值类型，*号表示所有的类型。
+             3、包名：表示需要拦截的包名，后面的两个句点表示当前包和当前包的所有子包，cn.smd.service.impl包、子孙包下所有类的方法。
+             4、第二个*号：表示类名，*号表示所有的类。
+             5、*(..):最后这个星号表示方法名，*号表示所有的方法，后面括弧里面表示方法的参数，两个句点表示任何参数。
+             -->
+<!--        <aop:pointcut id="pointcut" expression="execution(public String org.legend.service.Impl.StudentServiceImpl.deleteStudentByName(String)) or execution(public void org.legend.service.Impl.StudentServiceImpl.addStudent(..))"/>-->
+<!--  其他情况      -->
+        <!--   org.lanqiao.service.IStudentService包中，包含的所有方法（不包含子包中的方法）     -->
+<!--        <aop:pointcut id="pointcut" expression="execution(* org.legend.service.*.*(..))"/>-->
+        <!--   org.lanqiao.service.IStudentService包中，包含的所有方法（包含子包中的方法）     -->
+<!--        <aop:pointcut id="pointcut" expression="execution(public void org.legend.service..*.*(..))"/>-->
+
+        <!-- advisor:相当于连接切入点和切面的线  -->
+        <!-- =========连接线========= -->
+<!--        <aop:advisor advice-ref="logBefore" pointcut-ref="pointcut"/>-->
+<!--    </aop:config>-->
+<!--    <aop:config>-->
+<!--        <aop:pointcut id="pointcut2" expression="execution(public String org.legend.service.Impl.StudentServiceImpl.deleteStudentByName(String)) or execution(public void org.legend.service.Impl.StudentServiceImpl.addStudent(..))"/>-->
+<!--        <aop:advisor advice-ref="logAfter" pointcut-ref="pointcut2"/>-->
+<!--    </aop:config>-->
+<!--    <aop:config>-->
+<!--        <aop:pointcut id="pointcut3" expression="execution(public void org.legend.service.Impl.StudentServiceImpl.addStudent(org.legend.entity.Student))"/>-->
+<!--        <aop:advisor advice-ref="logException" pointcut-ref="pointcut3"/>-->
+<!--    </aop:config>-->
+<!--    <aop:config>-->
+<!--        <aop:pointcut id="pointcut4" expression="execution(public void org.legend.service.Impl.StudentServiceImpl.addStudent(org.legend.entity.Student))"/>-->
+<!--        <aop:advisor advice-ref="logAround" pointcut-ref="pointcut4"/>-->
+<!--    </aop:config>-->
+
+
+    <!-- 二、开启注解对AOP的支持 -->
+<!--    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>-->
+
+
+    <!--  三、schema方式  -->
+    <aop:config>
+    <!--   指定切点     -->
+        <aop:pointcut id="pcSchema" expression="execution(public String org.legend.service.Impl.StudentServiceImpl.deleteStudentByName(String))"/>
+    <!--  切面  -->
+        <aop:aspect ref="logSchema">
+            <!--  连接线：连接业务addStudent和通知before/afterReturning/whenException  -->
+            <aop:before method="before" pointcut-ref="pcSchema"/>
+            <aop:after-returning method="afterReturning" returning="returningValue" pointcut-ref="pcSchema"/>
+            <aop:after-throwing method="whenException" pointcut-ref="pcSchema" throwing="e"/>
+            <aop:around method="around" pointcut-ref="pcSchema"/>
+        </aop:aspect>
+    </aop:config>
+    <!-- 前置通知
+            环绕-前置通知
+             注解-环绕前置通知
+                注释-前置通知
+                     注解-最终通知
+                          注解-环绕后置通知
+                            注解-环绕最终通知
+                               环绕-后置通知
+                                    后置通知
+       -->
+</beans>
