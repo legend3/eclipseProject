@@ -5,7 +5,9 @@
 
 
     <!-- 加载映射文件 studentMapper.xml-->
+<!-- 
     <mappers>
         <mapper resource="studentMapper.xml"/>
     </mappers>
+     -->
 </configuration>
