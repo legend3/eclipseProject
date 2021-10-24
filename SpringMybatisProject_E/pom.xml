@@ -110,6 +110,6 @@
             <version>7.4.0</version>
             <!--  作用域：只能在test目录    -->
             <!--      <scope>test</scope>-->
-            </dependency>
+        </dependency>
     </dependencies>
 </project>
