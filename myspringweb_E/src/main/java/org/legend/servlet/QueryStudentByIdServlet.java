@@ -12,6 +12,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+/**
+ * 总结：三者执行的顺序
+一、当客户端发送请求：比如在游览器（提交表单）
+二、服务器会接收到信息， 通过表单的action="定位servlet地址"  找到servlet
+三、然后默认会去找：public修饰的service()方法：
+	1、当重写了(父类)HttpServlet的public修饰的service方法时：
+			只执行（重写的service方法的内容）
+			
+    2、当(没有)重写了(父类)HttpServlet的public修饰的service方法时:
+    	会自动调用HttpServlet中的service()方法, 这个方法最终会调用：HttpServlert中的
+    	protected service(HttpServletRequest req, HttpServletResponse resp)方法，
+        进而会依次找doGet()、doPost()方法	
+四、当提交表单时
+	1、若使用get方式提交， 若没有重写doGet()方法， 那么会报错。
+	2、若使用post方式提交，若没有重写doPost()方法，那么也会报错。
+
+五、所以很多（老师）推荐：
+		1、不去重写（父类public修饰的）service（）方法,直接写doGet()、doPost()方法。
+		2、因为（不重写）public修饰的service()方法，
+				会（先调用）（HttpService抽象类的) public的service()方法
+				(在调用)其protected 修饰的 service()方法。	
+ *
+ */
 
 public class QueryStudentByIdServlet extends HttpServlet {
     private static final long serialVersionUID = -2011846173471546715L;
